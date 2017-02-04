@@ -14,15 +14,14 @@ import java.util.TimeZone;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import net.kenevans.core.utils.SWTUtils;
-import net.kenevans.core.utils.Utils;
+import net.kenevans.gpxinspector.converters.IGpxConverter;
+import net.kenevans.gpxinspector.utils.SWTUtils;
 import net.kenevans.gpxtrackpointextensionsv1.GpxType;
 import net.kenevans.gpxtrackpointextensionsv1.RteType;
 import net.kenevans.gpxtrackpointextensionsv1.TrkType;
 import net.kenevans.gpxtrackpointextensionsv1.TrksegType;
 import net.kenevans.gpxtrackpointextensionsv1.WptType;
 import net.kenevans.gpxtrackpointextensionsv1.parser.GPXParser;
-import net.kenevans.gpxinspector.converters.IGpxConverter;
 
 /*
  * Created on May 12, 2011
@@ -65,7 +64,7 @@ public class GpslConverter implements IGpxConverter
      */
     @Override
     public boolean isParseSupported(File file) {
-        String fileExt = "." + Utils.getExtension(file);
+        String fileExt = "." + SWTUtils.getExtension(file);
         if(fileExt != null) {
             for(String ext : extensions) {
                 if(fileExt.equalsIgnoreCase(ext)) {
@@ -85,7 +84,7 @@ public class GpslConverter implements IGpxConverter
      */
     @Override
     public boolean isSaveSupported(File file) {
-        String fileExt = "." + Utils.getExtension(file);
+        String fileExt = "." + SWTUtils.getExtension(file);
         if(fileExt != null) {
             for(String ext : extensions) {
                 if(fileExt.equalsIgnoreCase(ext)) {
@@ -233,8 +232,8 @@ public class GpslConverter implements IGpxConverter
                 name = tokens[1];
                 latitude = tokens[2];
                 longitude = tokens[3];
-                altitude = String.format("%.6f", Double.valueOf(tokens[4])
-                    .doubleValue() / M2FT);
+                altitude = String.format("%.6f",
+                    Double.valueOf(tokens[4]).doubleValue() / M2FT);
                 symbol = tokens[5];
                 wptType = new WptType();
                 if(wptType == null) {
@@ -303,8 +302,8 @@ public class GpslConverter implements IGpxConverter
                 name = tokens[1];
                 latitude = tokens[2];
                 longitude = tokens[3];
-                altitude = String.format("%.6f", Double.valueOf(tokens[4])
-                    .doubleValue() / M2FT);
+                altitude = String.format("%.6f",
+                    Double.valueOf(tokens[4]).doubleValue() / M2FT);
                 time = tokens[5];
                 symbol = "";
                 wptType = new WptType();
@@ -429,8 +428,8 @@ public class GpslConverter implements IGpxConverter
                     gcal.setTime(new Date());
                 }
                 // Make a new local XMLGregorianCalendar
-                xgcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(
-                    gcal);
+                xgcal = DatatypeFactory.newInstance()
+                    .newXMLGregorianCalendar(gcal);
                 // Get its offset
                 offset = xgcal.getTimezone() / 60.;
             } catch(Throwable t) {
@@ -439,7 +438,7 @@ public class GpslConverter implements IGpxConverter
 
             // Print header
             out.print(GPSLINK_ID + ls);
-            timeStamp = Utils.timeStamp("MMM dd, yyyy hh:mm:ssa");
+            timeStamp = SWTUtils.timeStamp("MMM dd, yyyy hh:mm:ssa");
             // Convert AM/PM
             if(timeStamp.substring(21, 22).equalsIgnoreCase("P")) {
                 timeStamp = timeStamp.substring(0, 21) + "p";
@@ -456,18 +455,17 @@ public class GpslConverter implements IGpxConverter
                 out.print(ls + "Waypoints" + ls);
                 out.print(String.format("%s%s%s%s%s%s%s%s%s%s%s", "Type",
                     delimiter, "Name", delimiter, "Latitude", delimiter,
-                    "Longitude", delimiter, "Alt", delimiter, "Symbol")
-                    + ls);
+                    "Longitude", delimiter, "Alt", delimiter, "Symbol") + ls);
                 for(WptType wpt : gpxType.getWpt()) {
                     name = wpt.getName();
                     latitude = wpt.getLat().doubleValue();
                     longitude = wpt.getLon().doubleValue();
                     altitude = wpt.getEle().doubleValue() * M2FT;
                     symbol = wpt.getSym();
-                    out.print(String.format("W%s%s%s%.6f%s%.6f%s%.0f%s%s",
-                        delimiter, name, delimiter, latitude, delimiter,
-                        longitude, delimiter, altitude, delimiter, symbol)
-                        + ls);
+                    out.print(
+                        String.format("W%s%s%s%.6f%s%.6f%s%.0f%s%s", delimiter,
+                            name, delimiter, latitude, delimiter, longitude,
+                            delimiter, altitude, delimiter, symbol) + ls);
                 }
             }
 
@@ -476,8 +474,7 @@ public class GpslConverter implements IGpxConverter
                 out.print(ls + "Routes" + ls);
                 out.print(String.format("%s%s%s%s%s%s%s%s%s%s%s", "Type",
                     delimiter, "Name", delimiter, "Latitude", delimiter,
-                    "Longitude", delimiter, "Alt", delimiter, "Symbol")
-                    + ls);
+                    "Longitude", delimiter, "Alt", delimiter, "Symbol") + ls);
                 for(RteType rte : gpxType.getRte()) {
                     name = rte.getName();
                     out.print(String.format("R%s%s", delimiter, name) + ls);
@@ -501,8 +498,7 @@ public class GpslConverter implements IGpxConverter
                 out.print(ls + "Tracks" + ls);
                 out.print(String.format("%s%s%s%s%s%s%s%s%s%s%s", "Type",
                     delimiter, "Name", delimiter, "Latitude", delimiter,
-                    "Longitude", delimiter, "Alt", delimiter, "Time")
-                    + ls);
+                    "Longitude", delimiter, "Alt", delimiter, "Time") + ls);
                 for(TrkType trk : gpxType.getTrk()) {
                     name = trk.getName();
                     out.print(String.format("H%s%s", delimiter, name) + ls);
@@ -529,8 +525,7 @@ public class GpslConverter implements IGpxConverter
                             out.print(String.format(
                                 "T%s%s%s%.6f%s%.6f%s%.0f%s%s", delimiter, name,
                                 delimiter, latitude, delimiter, longitude,
-                                delimiter, altitude, delimiter, time)
-                                + ls);
+                                delimiter, altitude, delimiter, time) + ls);
                         }
                     }
                 }
@@ -602,8 +597,8 @@ public class GpslConverter implements IGpxConverter
      */
     public static String getTimeFromXMLGregorianCalendar(
         XMLGregorianCalendar xgcal, double offset) {
-        GregorianCalendar gcal = xgcal.toGregorianCalendar(
-            TimeZone.getTimeZone("GMT"), null, null);
+        GregorianCalendar gcal = xgcal
+            .toGregorianCalendar(TimeZone.getTimeZone("GMT"), null, null);
         gcal.add(GregorianCalendar.MINUTE, (int)Math.round(60. * offset));
         // Don't use SimpleDateFormat("MM/dd/yyyy HH:mm:ss") It will format with
         // the current time zone, Use the values for MONTH, etc. from the gcal.
