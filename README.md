@@ -1,6 +1,6 @@
-# net.kenevans.gpxinspector.gpsl
+# net.kenevans.gpxinspector.tcx
 
-GPX Inspector is an Eclipse RCP application for managing and viewing GPX files. (See below.)  It can be extended by adding convertors to read other GPS file formats.  This is an example convertor for converting from GPSL files. GPSL is a private format, probably not found publicly, but the code shows the steps needed for your own format of interest.
+GPX Inspector is an Eclipse RCP application for managing and viewing GPX files. (See below.)  It can be extended by adding convertors to read other GPS file formats.  This is a convertor for converting from Garmin Training Center (TCX) files.
 
 **More information**
 
