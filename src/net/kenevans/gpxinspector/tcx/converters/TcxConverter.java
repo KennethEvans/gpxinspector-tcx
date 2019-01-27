@@ -118,22 +118,18 @@ public class TcxConverter implements IGpxConverter {
 		GpxType gpx = new GpxType();
 		// These will be overwritten when saving as .gpx
 		gpx.setCreator("TCX Converter for GPX Inspector");
-		GPXParser.setMetaDataTime(gpx);
 
 		ActivityListT activityList;
 		List<ActivityT> activities;
 		List<ActivityLapT> laps;
 		List<TrackT> tracks;
 		List<TrackpointT> trackPoints;
-		// ExtensionsT trackPointExt;
 		Short cad, hr;
 		Double ele, dist;
 		double lat, lon;
 		XMLGregorianCalendar time;
 		HeartRateInBeatsPerMinuteT hrBpm;
 		PositionT position;
-		TrackPointExtensionT tpExt;
-		ExtensionsType extType;
 
 //		XMLGregorianCalendar id;
 //		SensorStateT sensorState;
@@ -143,11 +139,14 @@ public class TcxConverter implements IGpxConverter {
 //		PlanT plan;
 //		TrainingTypeT trainingType;
 
-		boolean error = false;
-		TrkType trkType = null;
-		TrksegType trksegType = null;
-		WptType wptType = null;
+		// GpxType variables (end with Gpx)
+		TrkType trkTypeGpx = null;
+		TrksegType trksegTypeGpx = null;
+		WptType wptTypeGpx = null;
+		TrackPointExtensionT tpExtGpx;
+		ExtensionsType extTypeGpx;
 
+		boolean error = false;
 		activityList = tcx.getActivities();
 		activities = activityList.getActivity();
 		for (ActivityT activity : activities) {
@@ -173,33 +172,33 @@ public class TcxConverter implements IGpxConverter {
 			for (ActivityLapT lap : laps) {
 				tracks = lap.getTrack();
 				for (TrackT track : tracks) {
-					trkType = new TrkType();
-					gpx.getTrk().add(trkType);
-					trksegType = new TrksegType();
-					trkType.getTrkseg().add(trksegType);
+					trkTypeGpx = new TrkType();
+					gpx.getTrk().add(trkTypeGpx);
+					trksegTypeGpx = new TrksegType();
+					trkTypeGpx.getTrkseg().add(trksegTypeGpx);
 					trackPoints = track.getTrackpoint();
 					for (TrackpointT trackPoint : trackPoints) {
-						wptType = new WptType();
+						wptTypeGpx = new WptType();
 						position = trackPoint.getPosition();
 						if (position != null) {
 							lat = position.getLatitudeDegrees();
 							lon = position.getLongitudeDegrees();
-							wptType.setLat(new BigDecimal(lat));
-							wptType.setLon(new BigDecimal(lon));
+							wptTypeGpx.setLat(BigDecimal.valueOf(lat));
+							wptTypeGpx.setLon(BigDecimal.valueOf(lon));
 							// Only add the segment if there is a valid lat and lon
-							trksegType.getTrkpt().add(wptType);
+							trksegTypeGpx.getTrkpt().add(wptTypeGpx);
 						} else {
 							continue;
 						}
 
 						ele = trackPoint.getAltitudeMeters();
 						if (ele != null) {
-							wptType.setEle(new BigDecimal(ele));
+							wptTypeGpx.setEle(BigDecimal.valueOf(ele));
 						}
 
 						time = trackPoint.getTime();
 						if (time != null) {
-							wptType.setTime(time);
+							wptTypeGpx.setTime(time);
 						}
 
 						cad = trackPoint.getCadence();
@@ -211,19 +210,19 @@ public class TcxConverter implements IGpxConverter {
 							hr = 0;
 						}
 						if ((hrBpm != null || cad != null || dist != null)) {
-							tpExt = new TrackPointExtensionT();
+							tpExtGpx = new TrackPointExtensionT();
 							if (hrBpm != null) {
-								tpExt.setHr(hr);
+								tpExtGpx.setHr(hr);
 							}
 							if (cad != null) {
-								tpExt.setCad(cad);
+								tpExtGpx.setCad(cad);
 							}
 							if (dist != null) {
-								tpExt.setDepth(dist);
+								tpExtGpx.setDepth(dist);
 							}
-							extType = new ExtensionsType();
-							extType.getAny().add(tpExt);
-							wptType.setExtensions(extType);
+							extTypeGpx = new ExtensionsType();
+							extTypeGpx.getAny().add(tpExtGpx);
+							wptTypeGpx.setExtensions(extTypeGpx);
 						}
 					}
 				}
