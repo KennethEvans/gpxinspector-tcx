@@ -181,7 +181,7 @@ public class TCXParser
         if(tcx == null) {
             return null;
         }
-        String desc;
+        String desc, notes, planName;
         double lat, lon;
         Double ele;
         // TCX types
@@ -194,6 +194,9 @@ public class TCXParser
         HeartRateInBeatsPerMinuteT hrBpm;
         Short hr, cad;
         XMLGregorianCalendar time;
+        TrainingT training;
+        PlanT plan;
+        TrainingTypeT trainingType;
         // GPX types
         GpxType gpxNew;
         MetadataType metadata;
@@ -227,6 +230,35 @@ public class TCXParser
         for(ActivityT activity : activityList) {
             trk = new TrkType();
             gpxNew.getTrk().add(trk);
+            // Get the description from the notes and training plan
+            desc = "";
+            planName = "";
+            notes = "";
+            training = activity.getTraining();
+            if(training != null) {
+                plan = training.getPlan();
+                if(plan != null) {
+                    trainingType = plan.getType();
+                    desc += "Training Type: " + trainingType;
+                    planName = plan.getName();
+                    if(planName != null && !planName.isEmpty()) {
+                        if(!desc.isEmpty()) {
+                            desc += " ";
+                        }
+                        desc += "PlanName: " + planName;
+                    }
+                }
+            }
+            notes = activity.getNotes();
+            if(notes != null && !notes.isEmpty()) {
+                if(!desc.isEmpty()) {
+                    desc += " ";
+                }
+                desc += "Notes: " + notes;
+            }
+            if(!desc.isEmpty()) {
+                trk.setDesc(desc);
+            }
             // Loop over laps (Correspond to a track segment(s))
             lapList = activity.getLap();
             for(ActivityLapT lap : lapList) {
