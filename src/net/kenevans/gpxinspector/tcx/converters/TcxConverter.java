@@ -1,28 +1,12 @@
 package net.kenevans.gpxinspector.tcx.converters;
 
 import java.io.File;
-import java.math.BigDecimal;
-import java.util.List;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import net.kenevans.gpxinspector.converters.IGpxConverter;
 import net.kenevans.gpxinspector.utils.SWTUtils;
-import net.kenevans.gpxtrackpointextensionv2.ExtensionsType;
 import net.kenevans.gpxtrackpointextensionv2.GpxType;
-import net.kenevans.gpxtrackpointextensionv2.TrackPointExtensionT;
-import net.kenevans.gpxtrackpointextensionv2.TrkType;
-import net.kenevans.gpxtrackpointextensionv2.TrksegType;
-import net.kenevans.gpxtrackpointextensionv2.WptType;
-import net.kenevans.gpxtrackpointextensionv2.parser.GPXParser;
-import net.kenevans.trainingcenterdatabasev2.ActivityLapT;
-import net.kenevans.trainingcenterdatabasev2.ActivityListT;
-import net.kenevans.trainingcenterdatabasev2.ActivityT;
-import net.kenevans.trainingcenterdatabasev2.HeartRateInBeatsPerMinuteT;
-import net.kenevans.trainingcenterdatabasev2.PositionT;
-import net.kenevans.trainingcenterdatabasev2.TrackT;
-import net.kenevans.trainingcenterdatabasev2.TrackpointT;
 import net.kenevans.trainingcenterdatabasev2.TrainingCenterDatabaseT;
 import net.kenevans.trainingcenterdatabasev2.parser.TCXParser;
 
