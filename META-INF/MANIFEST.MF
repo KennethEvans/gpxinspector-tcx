@@ -7,3 +7,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: net.kenevans.gpxinspector;bundle-version="1.0.0"
 Bundle-Vendor: kenevans.net
 Automatic-Module-Name: net.kenevans.gpxinspector.gpsl
+Export-Package: net.kenevans.gpxinspector.tcx.converters,
+ net.kenevans.trainingcenterdatabasev2,
+ net.kenevans.trainingcenterdatabasev2.parser
