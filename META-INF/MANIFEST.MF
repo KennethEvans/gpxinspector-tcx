@@ -2,11 +2,11 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: TCX Converter for GPX Inspector
 Bundle-SymbolicName: net.kenevans.gpxinspector.tcx;singleton:=true
-Bundle-Version: 1.4.0.0
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Version: 1.5.0.0
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: net.kenevans.gpxinspector;bundle-version="1.0.0"
 Bundle-Vendor: kenevans.net
-Automatic-Module-Name: net.kenevans.gpxinspector.gpsl
+Automatic-Module-Name: net.kenevans.gpxinspector.tcx
 Export-Package: net.kenevans.gpxinspector.tcx.converters,
  net.kenevans.trainingcenterdatabasev2,
  net.kenevans.trainingcenterdatabasev2.parser
