@@ -139,7 +139,8 @@ public class TCXParser
      * Parses a TCX file with the given name.
      * 
      * @param fileName The file name to parse.
-     * @return The TrainingCenterDatabaseT corresponding to the top level of the input file.
+     * @return The TrainingCenterDatabaseT corresponding to the top level of the
+     *         input file.
      * @throws JAXBException
      */
     public static TrainingCenterDatabaseT parse(String fileName)
@@ -160,8 +161,7 @@ public class TCXParser
         throws JAXBException {
         TrainingCenterDatabaseT tcx = null;
         ObjectFactory objectFactory = new ObjectFactory();
-        JAXBContext jc = JAXBContext
-            .newInstance(objectFactory.getClass());
+        JAXBContext jc = JAXBContext.newInstance(objectFactory.getClass());
         Unmarshaller unmarshaller = jc.createUnmarshaller();
         try {
             JAXBElement<TrainingCenterDatabaseT> root = (JAXBElement<TrainingCenterDatabaseT>)unmarshaller
@@ -217,10 +217,10 @@ public class TCXParser
         person = new PersonType();
         person.setName(AUTHOR);
         metadata.setAuthor(person);
-        desc = getMetadataDescriptionFromTcx(tcx);
-        if(desc != null) {
-            metadata.setDesc(desc);
-        }
+        // desc = getMetadataDescriptionFromTcx(tcx);
+        // if(desc != null) {
+        // metadata.setDesc(desc);
+        // }
         gpxNew.setMetadata(metadata);
 
         // Check if some trackpoints have position and some not.
@@ -294,9 +294,7 @@ public class TCXParser
                             continue;
                         }
                         ele = trackPoint.getAltitudeMeters();
-                        if(ele == null) {
-                            trkpt.setEle(BigDecimal.valueOf(0));
-                        } else {
+                        if(ele != null) {
                             trkpt.setEle(BigDecimal.valueOf(ele));
                         }
                         time = trackPoint.getTime();
