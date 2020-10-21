@@ -43,7 +43,6 @@ import net.kenevans.trainingcenterdatabasev2.TrainingTypeT;
 
 public class TCXParser
 {
-    private static String AUTHOR = "TCXParser (kenevans.net)";
     /** Hard-coded file name for testing with the main method. */
     // private static final String TEST_FILE =
     // "C:/Users/evans/Documents/GPSLink/Polar/Kenneth_Evans_2018-08-10_09-02-44.tcx";
@@ -214,13 +213,12 @@ public class TCXParser
         gpxNew = new GpxType();
         // Metadata
         metadata = new MetadataType();
-        person = new PersonType();
-        person.setName(AUTHOR);
-        metadata.setAuthor(person);
-        // desc = getMetadataDescriptionFromTcx(tcx);
-        // if(desc != null) {
-        // metadata.setDesc(desc);
-        // }
+        AbstractSourceT author = tcx.getAuthor();
+        if(author != null && author.getName() != null) {
+            person = new PersonType();
+            person.setName(author.getName());
+            metadata.setAuthor(person);
+        }
         gpxNew.setMetadata(metadata);
 
         // Check if some trackpoints have position and some not.
@@ -356,26 +354,6 @@ public class TCXParser
             }
         }
         return false;
-    }
-
-    public static String getMetadataDescriptionFromTcx(
-        TrainingCenterDatabaseT tcx) {
-        if(tcx == null) {
-            return null;
-        }
-        AbstractSourceT author = tcx.getAuthor();
-        if(author == null) {
-            return null;
-        }
-        StringBuilder sb = new StringBuilder();
-        if(author.getName() != null) {
-            sb.append(author.getName());
-        }
-        String desc = sb.toString();
-        if(desc.length() == 0) {
-            return null;
-        }
-        return desc;
     }
 
     /**
